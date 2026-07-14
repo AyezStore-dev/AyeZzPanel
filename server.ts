@@ -102,7 +102,8 @@ async function startServer() {
   await ensureLive2DAssets();
 
   const app = express();
-  const PORT = 3000;
+  const PORT = parseInt(process.env.PORT || '3000', 10);
+  const HOST = process.env.HOST || '0.0.0.0';
 
   // Store running process handles
   const activeProcesses: Record<string, any> = {};
@@ -971,8 +972,8 @@ async function startServer() {
     });
   }
 
-  app.listen(PORT, '0.0.0.0', () => {
-    console.log(`[AyeZzPanel Server] running on http://0.0.0.0:${PORT}`);
+  app.listen(PORT, HOST, () => {
+    console.log(`[AyeZzPanel Server] running on http://${HOST}:${PORT}`);
   });
 }
 

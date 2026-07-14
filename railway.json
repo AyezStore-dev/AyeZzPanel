@@ -1,0 +1,11 @@
+{
+  "build": {
+    "builder": "@railway/nodejs",
+    "start": "npm run build && npm start"
+  },
+  "deploy": {
+    "env": {
+      "NODE_ENV": "production"
+    }
+  }
+}
