@@ -1,11 +1,10 @@
 {
+  "$schema": "https://railway.com/railway.schema.json",
   "build": {
-    "builder": "@railway/nodejs",
-    "start": "npm run build && npm start"
+    "builder": "RAILPACK",
+    "buildCommand": "npm run build"
   },
   "deploy": {
-    "env": {
-      "NODE_ENV": "production"
-    }
+    "startCommand": "npm start"
   }
 }
