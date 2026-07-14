@@ -1,0 +1,97 @@
+{
+  "entities": {
+    "ClientAccount": {
+      "title": "ClientAccount",
+      "description": "A client user account managed in Firestore",
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string",
+          "description": "Unique identifier of the client"
+        },
+        "username": {
+          "type": "string",
+          "description": "Username of the client account"
+        },
+        "email": {
+          "type": "string",
+          "format": "email",
+          "description": "Email address of the client"
+        },
+        "role": {
+          "type": "string",
+          "enum": ["client"],
+          "description": "Role privilege"
+        },
+        "status": {
+          "type": "string",
+          "enum": ["active", "suspended", "disabled"],
+          "description": "Account status"
+        },
+        "notes": {
+          "type": "string",
+          "description": "Optional administrator notes"
+        },
+        "createdAt": {
+          "type": "string",
+          "format": "date-time",
+          "description": "When the client account was created"
+        },
+        "updatedAt": {
+          "type": "string",
+          "format": "date-time",
+          "description": "When the client account was last updated"
+        }
+      },
+      "required": ["id", "username", "email", "role", "status", "createdAt", "updatedAt"]
+    },
+    "ClientActivityLog": {
+      "title": "ClientActivityLog",
+      "description": "An activity log entry for a client user",
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string",
+          "description": "Unique identifier of the log entry"
+        },
+        "clientId": {
+          "type": "string",
+          "description": "Unique identifier of the client"
+        },
+        "username": {
+          "type": "string",
+          "description": "Username of the client account"
+        },
+        "actionType": {
+          "type": "string",
+          "enum": ["login", "logout", "create_server", "delete_server", "status_change", "simulation", "deploy_app", "other"],
+          "description": "Type of client action performed"
+        },
+        "description": {
+          "type": "string",
+          "description": "Descriptive message about the action"
+        },
+        "ipAddress": {
+          "type": "string",
+          "description": "Simulated or actual IP address of request"
+        },
+        "timestamp": {
+          "type": "string",
+          "format": "date-time",
+          "description": "Timestamp of action execution"
+        }
+      },
+      "required": ["id", "clientId", "username", "actionType", "description", "timestamp"]
+    }
+  },
+  "firestore": {
+    "client_accounts": {
+      "schema": "ClientAccount",
+      "description": "Registry of managed client accounts"
+    },
+    "client_activity_logs": {
+      "schema": "ClientActivityLog",
+      "description": "Registry of activity log entries for client accounts"
+    }
+  }
+}

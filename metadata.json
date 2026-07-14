@@ -1,0 +1,6 @@
+{
+  "name": "AyeZzPanel",
+  "description": "An interactive glassmorphism control panel dashboard for AyeZzPanel containing dynamic real-time resource dials for CPU, RAM, and Disk memory usages.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}

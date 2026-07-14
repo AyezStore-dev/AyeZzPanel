@@ -1,0 +1,54 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+
+    // Helper to validate identifier strings
+    function isValidId(id) {
+      return id is string && id.size() <= 128 && id.matches('^[a-zA-Z0-9_\\-]+$');
+    }
+
+    // Helper to validate shape and type of a ClientAccount document
+    function isValidClientAccount(data) {
+      return data.id is string && data.id.size() <= 50 &&
+             data.username is string && data.username.size() >= 3 && data.username.size() <= 50 &&
+             data.email is string && data.email.size() >= 5 && data.email.size() <= 100 &&
+             data.role == 'client' &&
+             (data.status == 'active' || data.status == 'suspended' || data.status == 'disabled') &&
+             (!('notes' in data) || (data.notes is string && data.notes.size() <= 1000)) &&
+             data.createdAt is string && data.createdAt.size() <= 50 &&
+             data.updatedAt is string && data.updatedAt.size() <= 50;
+    }
+
+    // Helper to validate shape and type of a ClientActivityLog document
+    function isValidClientActivityLog(data) {
+      return data.id is string && data.id.size() <= 50 &&
+             data.clientId is string && data.clientId.size() <= 50 &&
+             data.username is string && data.username.size() >= 3 && data.username.size() <= 50 &&
+             (data.actionType == 'login' || data.actionType == 'logout' || data.actionType == 'create_server' || data.actionType == 'delete_server' || data.actionType == 'status_change' || data.actionType == 'simulation' || data.actionType == 'deploy_app' || data.actionType == 'other') &&
+             data.description is string && data.description.size() <= 1000 &&
+             (!('ipAddress' in data) || (data.ipAddress is string && data.ipAddress.size() <= 50)) &&
+             data.timestamp is string && data.timestamp.size() <= 50;
+    }
+
+    // Client Accounts collection rules
+    match /client_accounts/{clientId} {
+      allow read: if true;
+      allow create: if isValidId(clientId) && isValidClientAccount(request.resource.data);
+      allow update: if isValidId(clientId) && isValidClientAccount(request.resource.data);
+      allow delete: if isValidId(clientId);
+    }
+
+    // Client Activity Logs collection rules
+    match /client_activity_logs/{logId} {
+      allow read: if true;
+      allow create: if isValidId(logId) && isValidClientActivityLog(request.resource.data);
+      allow update: if isValidId(logId) && isValidClientActivityLog(request.resource.data);
+      allow delete: if isValidId(logId);
+    }
+
+    // Default deny net
+    match /{document=**} {
+      allow read, write: if false;
+    }
+  }
+}
